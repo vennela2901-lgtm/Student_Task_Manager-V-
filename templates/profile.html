@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - Student Task Manager</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css1/style.css') }}">
+</head>
+
+<body>
+
+<div class="container profile-container">
+
+    <h1>👤 My Profile</h1>
+
+    <hr>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <h2>{{ username }}</h2>
+
+        <p>Student Account</p>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+    {% if message %}
+
+    <div class="success-message">
+        ✅ {{ message }}
+    </div>
+
+    {% endif %}
+
+
+    <!-- ERROR MESSAGE -->
+    {% if error %}
+
+    <div class="error-message">
+        ❌ {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    <hr>
+
+
+    <!-- CHANGE PASSWORD -->
+    <h2>🔐 Change Password</h2>
+
+    <form method="POST">
+
+        <label for="current_password">
+            <strong>Current Password</strong>
+        </label>
+
+        <br>
+
+        <input
+            type="password"
+            id="current_password"
+            name="current_password"
+            placeholder="Enter current password"
+            required
+        >
+
+        <br><br>
+
+
+        <label for="new_password">
+            <strong>New Password</strong>
+        </label>
+
+        <br>
+
+        <input
+            type="password"
+            id="new_password"
+            name="new_password"
+            placeholder="Enter new password"
+            minlength="6"
+            required
+        >
+
+        <br><br>
+
+
+        <label for="confirm_password">
+            <strong>Confirm New Password</strong>
+        </label>
+
+        <br>
+
+        <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            placeholder="Confirm new password"
+            minlength="6"
+            required
+        >
+
+        <br><br>
+
+
+        <button type="submit">
+            🔐 Change Password
+        </button>
+
+    </form>
+
+    <br>
+
+
+    <!-- DASHBOARD -->
+    <a href="/dashboard">
+        <button type="button">
+            ← Back to Dashboard
+        </button>
+    </a>
+
+
+    <!-- LOGOUT -->
+    <a href="/logout">
+        <button type="button">
+            🚪 Logout
+        </button>
+    </a>
+
+</div>
+
+</body>
+</html>

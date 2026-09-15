@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Activity History</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css1/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📜 Activity History</h1>
+
+    <h2>Welcome {{ username }} 👋</h2>
+
+    <hr>
+
+
+    {% if activities %}
+
+        {% for activity in activities %}
+
+        <div class="activity-item">
+
+            <div class="activity-icon">
+
+                {% if activity[0] == "Task Added" %}
+
+                    ➕
+
+                {% elif activity[0] == "Task Completed" %}
+
+                    ✅
+
+                {% elif activity[0] == "Task Edited" %}
+
+                    ✏️
+
+                {% elif activity[0] == "Task Deleted" %}
+
+                    🗑️
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="activity-content">
+
+                <strong>
+                    {{ activity[0] }}
+                </strong>
+
+                <p>
+                    {{ activity[1] }}
+                </p>
+
+                <small>
+                    🕒 {{ activity[2] }}
+                </small>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="no-activity">
+
+            <h3>
+                📭 No activity yet
+            </h3>
+
+            <p>
+                Your task activities will appear here.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <br>
+
+
+    <a href="/dashboard">
+
+        <button>
+            ← Back to Dashboard
+        </button>
+
+    </a>
+
+</div>
+
+</body>
+ 
+</html>

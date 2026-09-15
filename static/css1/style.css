@@ -1,0 +1,482 @@
+/* =========================================
+   STUDENT TASK MANAGER
+   PROFESSIONAL STYLE
+   ========================================= */
+
+
+/* =========================================
+   GENERAL
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+   ========================================= */
+
+.container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================
+   HEADINGS
+   ========================================= */
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 32px;
+}
+
+h2 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+h3 {
+    margin-bottom: 8px;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+
+/* =========================================
+   LINKS
+   ========================================= */
+
+a {
+    text-decoration: none;
+    color: #2563eb;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   HORIZONTAL LINE
+   ========================================= */
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 25px 0;
+}
+
+
+/* =========================================
+   DASHBOARD NAVIGATION
+   ========================================= */
+
+.dashboard-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.dashboard-links a {
+    background: #eef4ff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.dashboard-links a:hover {
+    background: #dbeafe;
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   STATISTICS CARDS
+   ========================================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 20px;
+    text-align: center;
+    border-radius: 12px;
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+    font-size: 15px;
+}
+
+.card p {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+}
+
+
+/* =========================================
+   FORMS
+   ========================================= */
+
+form {
+    margin-top: 10px;
+}
+
+input,
+select {
+    width: 100%;
+    max-width: 500px;
+    padding: 11px 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 15px;
+    margin-top: 5px;
+    background: white;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+button {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 7px;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+    font-weight: bold;
+    margin: 4px;
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   TABLE
+   ========================================= */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    min-width: 850px;
+}
+
+th {
+    background: #1e293b;
+    color: white;
+    padding: 13px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+tr:hover {
+    background: #f8fafc;
+}
+
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.status-pending,
+.status-progress,
+.status-completed {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.status-pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.status-progress {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.status-completed {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+
+/* =========================================
+   PROGRESS BAR
+   ========================================= */
+
+.progress-container {
+    width: 100%;
+    margin: 15px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 28px;
+    background: #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #2563eb;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: width 0.5s ease;
+}
+
+
+/* =========================================
+   NOTIFICATIONS
+   ========================================= */
+
+.notifications {
+    background: #f8fafc;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border-left: 5px solid #2563eb;
+}
+
+.notifications p {
+    margin: 5px 0;
+}
+
+
+/* =========================================
+   ALERT BOX
+   ========================================= */
+
+.alert-box {
+    background: #fff7ed;
+    border-left: 5px solid #f97316;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================
+   FILTERS
+   ========================================= */
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filters a {
+    background: #f1f5f9;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-weight: bold;
+    color: #334155;
+}
+
+.filters a:hover {
+    background: #e2e8f0;
+    text-decoration: none;
+}
+
+
+/* =========================================
+   ANALYTICS
+   ========================================= */
+
+.analytics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.chart-box {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.chart-box h3 {
+    text-align: center;
+}
+
+
+/* =========================================
+   SUCCESS / ERROR
+   ========================================= */
+
+.success-message {
+    background: #f0fdf4;
+    color: #166534;
+    border-left: 5px solid #22c55e;
+    padding: 12px 15px;
+    margin: 15px 0;
+    border-radius: 7px;
+}
+
+.error-message {
+    background: #fef2f2;
+    color: #991b1b;
+    border-left: 5px solid #ef4444;
+    padding: 12px 15px;
+    margin: 15px 0;
+    border-radius: 7px;
+}
+
+
+/* =========================================
+   PROFILE
+   ========================================= */
+
+.profile-container {
+    max-width: 700px;
+}
+
+.profile-card {
+    text-align: center;
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 1px solid #e2e8f0;
+}
+
+.profile-icon {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+
+.profile-card h2 {
+    margin: 5px 0;
+}
+
+
+/* =========================================
+   ACTIVITY HISTORY
+   ========================================= */
+
+.activity-list {
+    margin-top: 20px;
+}
+
+.activity-item {
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f8fafc;
+    border-left: 4px solid #2563eb;
+    border-radius: 7px;
+}
+
+
+/* =========================================
+   MOBILE RESPONSIVE
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .analytics {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .container {
+        width: 96%;
+        padding: 18px;
+        margin: 15px auto;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-links {
+        flex-direction: column;
+    }
+
+    .dashboard-links a {
+        text-align: center;
+    }
+
+    button {
+        width: auto;
+    }
+
+}

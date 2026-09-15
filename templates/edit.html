@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Task</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css1/style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>✏️ Edit Task</h1>
+
+    <hr>
+
+    <form method="POST">
+
+        <label>
+            <strong>Task</strong>
+        </label>
+
+        <br>
+
+        <input
+            type="text"
+            name="task"
+            value="{{ task[2] }}"
+            required>
+
+        <br><br>
+
+        <label>
+            <strong>Due Date</strong>
+        </label>
+
+        <br>
+
+        <input
+            type="date"
+            name="due_date"
+            value="{{ task[4] }}"
+            required>
+
+        <br><br>
+
+        <label>
+            <strong>Priority</strong>
+        </label>
+
+        <br>
+
+        <select name="priority">
+
+            <option value="High"
+                {% if task[5] == "High" %}selected{% endif %}>
+                🔴 High
+            </option>
+
+            <option value="Medium"
+                {% if task[5] == "Medium" %}selected{% endif %}>
+                🟡 Medium
+            </option>
+
+            <option value="Low"
+                {% if task[5] == "Low" %}selected{% endif %}>
+                🟢 Low
+            </option>
+
+        </select>
+
+        <br><br>
+
+        <label>
+            <strong>Category</strong>
+        </label>
+
+        <br>
+
+        <select name="category">
+
+            <option value="Study"
+                {% if task[6] == "Study" %}selected{% endif %}>
+                📚 Study
+            </option>
+
+            <option value="Coding"
+                {% if task[6] == "Coding" %}selected{% endif %}>
+                💻 Coding
+            </option>
+
+            <option value="Assignment"
+                {% if task[6] == "Assignment" %}selected{% endif %}>
+                📝 Assignment
+            </option>
+
+            <option value="Personal"
+                {% if task[6] == "Personal" %}selected{% endif %}>
+                🎯 Personal
+            </option>
+
+            <option value="Other"
+                {% if task[6] == "Other" %}selected{% endif %}>
+                📌 Other
+            </option>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            💾 Save Changes
+        </button>
+
+        <a href="/dashboard">
+            <button type="button">
+                ← Back
+            </button>
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

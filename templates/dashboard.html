@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Task Manager</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css1/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <h1>🎓 Student Task Manager</h1>
+
+    <p style="text-align:center;">
+        Welcome, <strong>{{ username }}</strong> 👋
+    </p>
+
+    <div class="dashboard-links">
+        <a href="{{ url_for('profile') }}">👤 Profile</a>
+        <a href="{{ url_for('activity') }}">📜 Activity</a>
+        <a href="{{ url_for('export_tasks') }}">📥 Export CSV</a>
+        <a href="{{ url_for('logout') }}">🚪 Logout</a>
+    </div>
+
+    <hr>
+
+    <!-- STATISTICS -->
+    <h2>📊 Task Overview</h2>
+
+    <div class="stats">
+
+        <div class="card">
+            <h3>📋 Total</h3>
+            <p>{{ total }}</p>
+        </div>
+
+        <div class="card">
+            <h3>⏳ Pending</h3>
+            <p>{{ pending }}</p>
+        </div>
+
+        <div class="card">
+            <h3>🔄 In Progress</h3>
+            <p>{{ in_progress }}</p>
+        </div>
+
+        <div class="card">
+            <h3>✅ Completed</h3>
+            <p>{{ completed }}</p>
+        </div>
+
+        <div class="card">
+            <h3>⚠️ Overdue</h3>
+            <p>{{ overdue_count }}</p>
+        </div>
+
+    </div>
+
+    <!-- PROGRESS -->
+    <h2>📈 Overall Progress</h2>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill"
+                 style="width: {{ progress }}%;">
+                {{ progress }}%
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <h2>🔔 Notifications</h2>
+
+    <div class="notifications">
+
+        {% if overdue_count > 0 %}
+            <p>⚠️ You have <strong>{{ overdue_count }}</strong> overdue task(s).</p>
+        {% else %}
+            <p>✅ No overdue tasks.</p>
+        {% endif %}
+
+        {% if upcoming_count > 0 %}
+            <p>📅 You have <strong>{{ upcoming_count }}</strong> upcoming task(s).</p>
+        {% else %}
+            <p>📅 No upcoming tasks.</p>
+        {% endif %}
+
+    </div>
+
+    <!-- ADD TASK -->
+    <h2>➕ Add New Task</h2>
+
+    <form method="POST">
+
+        <label><strong>Task</strong></label><br>
+        <input type="text"
+               name="task"
+               placeholder="Enter your task"
+               required>
+
+        <br><br>
+
+        <label><strong>Due Date</strong></label><br>
+        <input type="date"
+               name="due_date"
+               required>
+
+        <br><br>
+
+        <label><strong>Priority</strong></label><br>
+
+        <select name="priority">
+            <option value="High">🔴 High</option>
+            <option value="Medium" selected>🟡 Medium</option>
+            <option value="Low">🟢 Low</option>
+        </select>
+
+        <br><br>
+
+        <label><strong>Category</strong></label><br>
+
+        <select name="category">
+            <option value="Study">📚 Study</option>
+            <option value="Coding">💻 Coding</option>
+            <option value="Assignment">📝 Assignment</option>
+            <option value="Personal">🎯 Personal</option>
+            <option value="Other">📌 Other</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">➕ Add Task</button>
+
+    </form>
+
+    <hr>
+
+    <!-- SEARCH -->
+    <h2>🔎 Search & Manage Tasks</h2>
+
+    <form method="GET" action="{{ url_for('dashboard') }}">
+
+        <input type="text"
+               name="search"
+               value="{{ search }}"
+               placeholder="Search task name...">
+
+        <!-- Preserve current filter and sort -->
+        <input type="hidden"
+               name="filter"
+               value="{{ filter_type }}">
+
+        <input type="hidden"
+               name="sort"
+               value="{{ sort_type }}">
+
+        <button type="submit">🔎 Search</button>
+
+        <a href="{{ url_for('dashboard') }}">
+            <button type="button">✖ Clear</button>
+        </a>
+
+    </form>
+
+    <!-- FILTERS -->
+    <h3>🔽 Filter</h3>
+
+    <div class="filters">
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter='all',
+                    sort=sort_type) }}">
+            📋 All
+        </a>
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter='pending',
+                    sort=sort_type) }}">
+            ⏳ Pending
+        </a>
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter='in_progress',
+                    sort=sort_type) }}">
+            🔄 In Progress
+        </a>
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter='completed',
+                    sort=sort_type) }}">
+            ✅ Completed
+        </a>
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter='high',
+                    sort=sort_type) }}">
+            🔴 High Priority
+        </a>
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter='overdue',
+                    sort=sort_type) }}">
+            ⚠️ Overdue
+        </a>
+
+    </div>
+
+    <!-- SORT -->
+    <h3>↕️ Sort</h3>
+
+    <div class="filters">
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter=filter_type,
+                    sort='newest') }}">
+            🆕 Newest
+        </a>
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter=filter_type,
+                    sort='due') }}">
+            📅 Due Date
+        </a>
+
+        <a href="{{ url_for('dashboard',
+                    search=search,
+                    filter=filter_type,
+                    sort='priority') }}">
+            🔴 Priority
+        </a>
+
+    </div>
+
+    <!-- CURRENT FILTER -->
+    <p>
+        <strong>Current:</strong>
+
+        {% if search %}
+            🔎 "{{ search }}"
+        {% endif %}
+
+        {% if filter_type == 'pending' %}
+            | ⏳ Pending
+        {% elif filter_type == 'in_progress' %}
+            | 🔄 In Progress
+        {% elif filter_type == 'completed' %}
+            | ✅ Completed
+        {% elif filter_type == 'high' %}
+            | 🔴 High Priority
+        {% elif filter_type == 'overdue' %}
+            | ⚠️ Overdue
+        {% endif %}
+
+        {% if sort_type == 'due' %}
+            | 📅 Due Date
+        {% elif sort_type == 'priority' %}
+            | 🔴 Priority
+        {% else %}
+            | 🆕 Newest
+        {% endif %}
+    </p>
+
+    <!-- OVERDUE -->
+    {% if overdue_tasks %}
+    <div class="alert-box">
+
+        <h3>⚠️ Overdue Tasks</h3>
+
+        {% for task in overdue_tasks %}
+            <p>
+                🔴 <strong>{{ task[2] }}</strong>
+                — Due: {{ task[4] }}
+            </p>
+        {% endfor %}
+
+    </div>
+    {% endif %}
+
+    <!-- UPCOMING -->
+    {% if upcoming_tasks %}
+
+    <h2>📅 Upcoming Tasks</h2>
+
+    <div class="notifications">
+
+        {% for task in upcoming_tasks[:5] %}
+
+            <p>
+                📌 <strong>{{ task[2] }}</strong>
+                — {{ task[4] }}
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+    <!-- TASK TABLE -->
+    <h2>📝 My Tasks</h2>
+
+    {% if tasks %}
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for task in tasks %}
+
+                <tr>
+
+                    <!-- TASK -->
+                    <td>
+                        <strong>{{ task[2] }}</strong>
+                    </td>
+
+                    <!-- STATUS -->
+                    <td>
+
+                        {% if task[3] == "Pending" %}
+
+                            <span class="status-pending">
+                                ⏳ Pending
+                            </span>
+
+                        {% elif task[3] == "In Progress" %}
+
+                            <span class="status-progress">
+                                🔄 In Progress
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-completed">
+                                ✅ Completed
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <!-- DUE DATE -->
+                    <td>
+
+                        {% if task[4] %}
+
+                            {% if task[3] != "Completed" and task[4] < today %}
+
+                                <strong style="color:#dc2626;">
+                                    ⚠️ {{ task[4] }}
+                                </strong>
+
+                            {% else %}
+
+                                📅 {{ task[4] }}
+
+                            {% endif %}
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                    </td>
+
+                    <!-- PRIORITY -->
+                    <td>
+
+                        {% if task[5] == "High" %}
+                            🔴 High
+                        {% elif task[5] == "Medium" %}
+                            🟡 Medium
+                        {% else %}
+                            🟢 Low
+                        {% endif %}
+
+                    </td>
+
+                    <!-- CATEGORY -->
+                    <td>
+
+                        {% if task[6] == "Study" %}
+                            📚 Study
+                        {% elif task[6] == "Coding" %}
+                            💻 Coding
+                        {% elif task[6] == "Assignment" %}
+                            📝 Assignment
+                        {% elif task[6] == "Personal" %}
+                            🎯 Personal
+                        {% else %}
+                            📌 Other
+                        {% endif %}
+
+                    </td>
+
+                    <!-- ACTIONS -->
+                    <td>
+
+                        {% if task[3] == "Pending" %}
+
+                            <a href="{{ url_for('change_status',
+                                       id=task[0],
+                                       status='In Progress') }}">
+                                <button type="button">
+                                    ▶ Start
+                                </button>
+                            </a>
+
+                        {% elif task[3] == "In Progress" %}
+
+                            <a href="{{ url_for('change_status',
+                                       id=task[0],
+                                       status='Completed') }}">
+                                <button type="button">
+                                    ✅ Complete
+                                </button>
+                            </a>
+
+                        {% else %}
+
+                            <span>🎉 Done</span>
+
+                        {% endif %}
+
+                        <a href="{{ url_for('edit', id=task[0]) }}">
+                            <button type="button">
+                                ✏️ Edit
+                            </button>
+                        </a>
+
+                        <a href="{{ url_for('delete', id=task[0]) }}"
+                           onclick="return confirm('Are you sure you want to delete this task?');">
+                            <button type="button">
+                                🗑️ Delete
+                            </button>
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+        <div class="alert-box">
+            <h3>📭 No tasks found</h3>
+            <p>Try changing your search or filter.</p>
+        </div>
+
+    {% endif %}
+
+    <!-- ANALYTICS -->
+    <h2>📊 Analytics</h2>
+
+    <div class="analytics">
+
+        <div class="chart-box">
+            <h3>Task Status</h3>
+            <canvas id="statusChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+            <h3>Task Categories</h3>
+            <canvas id="categoryChart"></canvas>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    // STATUS CHART
+    const statusCanvas = document.getElementById("statusChart");
+
+    new Chart(statusCanvas, {
+        type: "doughnut",
+
+        data: {
+            labels: [
+                "Pending",
+                "In Progress",
+                "Completed"
+            ],
+
+            datasets: [{
+                data: [
+                    {{ pending }},
+                    {{ in_progress }},
+                    {{ completed }}
+                ]
+            }]
+        },
+
+        options: {
+            responsive: true
+        }
+    });
+
+
+    // CATEGORY CHART
+    const categoryCanvas = document.getElementById("categoryChart");
+
+    new Chart(categoryCanvas, {
+        type: "bar",
+
+        data: {
+            labels: [
+                "Study",
+                "Coding",
+                "Assignment",
+                "Personal",
+                "Other"
+            ],
+
+            datasets: [{
+                label: "Tasks",
+
+                data: [
+                    {{ categories["Study"] }},
+                    {{ categories["Coding"] }},
+                    {{ categories["Assignment"] }},
+                    {{ categories["Personal"] }},
+                    {{ categories["Other"] }}
+                ]
+            }]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+
+</body>
+</html>
